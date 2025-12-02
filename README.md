@@ -192,4 +192,8 @@ Plusieurs utterances neutres → toutes prédites correctement.
 - Données MELD prétraitées disponibles localement  
 - Librairies essentielles  
 
-### 🔧 Installation
+### 🔧 Auteurs 
+- Yohan MARCEL
+- Thomas MATHIOT
+- Nicolas PINIER
+- Anthony SABBAGH
