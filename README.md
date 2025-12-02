@@ -90,3 +90,30 @@ tqdm
 matplotlib
 seaborn
 pathlib
+
+## 📈 Résultats
+- Performances — Test Set
+- Métrique	Valeur
+- Test Loss	0.0027
+- Acc-2	0.7467
+- F1-Score	0.7518
+- MAE	0.0390
+- Pearson	0.9983
+- Poids de la MFU
+- Poids	Valeur	Contribution
+- α (Audio)	0.9938	49.8%
+- β (Vision)	1.0033	50.2%
+
+## 🔍 Exemples de Prédictions
+
+Le notebook inclut :
+
+- utterance d’origine
+
+- description audio générée
+
+- description visuelle générée
+
+- score prédit
+
+- comparaison avec la vérité terrain
