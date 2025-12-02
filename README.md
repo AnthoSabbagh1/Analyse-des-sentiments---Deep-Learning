@@ -6,118 +6,190 @@
 
 Lien du dataset : https://www.kaggle.com/datasets/argish/meld-preprocessed/data
 
-## 📘 Introduction
 
-DEVA est un modèle d’analyse de sentiment multimodal appliqué au dataset **MELD**.  
-Il prédit le sentiment (**positif**, **négatif**, **neutre**) à partir de trois modalités :
-
-- 📝 Texte  
-- 🎧 Audio  
-- 🎥 Vision (expressions faciales)
-
-Les modalités non textuelles sont converties en **descriptions textuelles**, puis fusionnées avec le texte via une **Cross-Modal Attention** et une **Minor Fusion Unit (MFU)**.
+> 🎭 **Texte + Audio + Vision** unifiés pour prédire le sentiment humain avec l’architecture DEVANet.
 
 ---
 
-## ✨ Fonctionnalités
+## 🚀 Introduction
+Ce projet implémente **DEVANet**, un modèle multimodal combinant :
+- 📝 **Texte** (BERT + Transformer)
+- 🔊 **Audio** (features & Mel-spectrograms)
+- 👀 **Vision** (émotions faciales)
 
-- 🔗 Fusion multimodale : texte + audio + vision  
-- 🧠 Encodage textuel : BERT + Transformer Encoder  
-- 🗣️ Génération de descriptions audio et visuelles  
-- 🧩 Minor Fusion Unit (MFU) avec poids apprenables (α / β)  
-- 📊 Évaluation complète : Acc-2, Acc-5, Acc-7 F1, MAE, Pearson  
-- ⚖️ Sampling stratifié pour un dataset équilibré  
+Objectif 🎯 : prédire le sentiment **positive / negative / neutral** pour chaque utterance du dataset **MELD**.
 
----
-
-## 🏛️ Architecture du Modèle (DEVANet)
-
-### 🔹 TextEncoder
-- Tokenisation : `BertTokenizer`  
-- Embeddings : `BertModel`  
-- Ajout d’un token spécial `Em`  
-- Passage dans un `TransformerEncoder`
-
-### 🔹 Générateurs de Descriptions
-- **AudioDescriptionGenerator**  
-  Ex : “The speaker has high energy, low pitch, and fast speech.”
-- **VisionDescriptionGenerator**  
-  Ex : “The person displays wide open eyes and raised eyebrows.”
-
-### 🔹 Cross-Modal Attention
-- Attention multi-têtes (`MultiheadAttention`)  
-- Interaction texte ↔ description audio  
-- Interaction texte ↔ description visuelle  
-
-### 🔹 Minor Fusion Unit (MFU)
-- Fusion du texte, de l'attention audio et de l'attention vision  
-- Poids apprenables :  
-  - α (audio)  
-  - β (vision)
-
-### 🔹 Prédicteur Final
-- Réseau feed-forward  
-- Sortie : score de sentiment ∈ [-1.0, 1.0]
+L’architecture repose sur :
+- un encodeur texte avancé,
+- des encodeurs audio & visuels simplifiés,
+- une **Cross-Modal Attention**,
+- une **Multimodal Fusion Unit (MFU)** apprenant à pondérer les modalités,
+- un prédicteur final donnant un score continu ∈ [-1, 1].
 
 ---
 
-## 📚 Dataset : MELD
+## 📚 Dataset MELD
 
-Le dataset **MELD** contient des dialogues annotés de la série *Friends* avec :
-
-- texte  
-- émotions et sentiments  
-- audio + MFCCs  
-- images faciales  
-
-Découpage : **train / validation / test**  
-Sampling stratifié sur train et validation.
+### 📁 Structure des fichiers `.pt`
+Chaque entrée contient :
+- 🗣️ `utterance` — texte  
+- 🎭 `emotion` — émotion MELD  
+- 🎧 `audio` — vecteur audio brut  
+- 🔉 `audio_mel` — Mel-spectrogram  
+- 👤 `face` — features faciales  
 
 ---
 
-## ⚙️ Installation
+### 🔄 Mapping émotions → sentiment
+| Emotion | Sentiment |
+|---------|-----------|
+| joy, surprise | 😊 positive |
+| sadness, anger, fear, disgust | 😡 negative |
+| neutral | 😐 neutral |
 
-### Prérequis
+---
 
-- Python 3.x
-- torch
-- transformers
-- numpy
-- pandas
-- scikit-learn
-- scipy
-- tqdm
-- matplotlib
-- seaborn
-- pathlib
+### 📊 Données échantillonnées (stratified)
+| Set | Total | 😀 Pos | 😡 Neg | 😐 Neu |
+|------|-------|--------|--------|--------|
+| Train | 300 | 100 | 100 | 100 |
+| Dev | 150 | 50 | 50 | 50 |
+| Test | 150 | 50 | 50 | 50 |
 
-## 📈 Résultats
-- Performances — Test Set
-- Métrique	Valeur
-- Test Loss	0.0027
-- Acc-2	0.7467
-- F1-Score	0.7518
-- MAE	0.0390
-- Pearson	0.9983
-- Poids de la MFU
-- Poids	Valeur	Contribution
-- α (Audio)	0.9938	49.8%
-- β (Vision)	1.0033	50.2%
+Toutes les modalités sont disponibles pour 100% des échantillons.
+
+---
+
+## 🧠 Architecture DEVANet
+
+### 📝 1. Encodeur Texte  
+- BERT tokenizer + BERT embeddings  
+- Transformer Encoder  
+- Token spécial **Em** pour booster la représentation globale  
+
+---
+
+### 🎧 2. AudioDescriptionGenerator  
+Transforme les Mel-features en embedding 768D :  
+- Projection linéaire  
+- AdaptiveAvgPool1d  
+- MLP  
+
+---
+
+### 👀 3. VisionDescriptionGenerator  
+Encode l’émotion en un embedding dense 768D :  
+- `nn.Embedding(num_emotions → 768)`
+
+---
+
+### 🔁 4. Cross-Modal Attention  
+Permet au texte d’extraire les informations pertinentes dans :
+- 🔊 audio  
+- 👀 vision  
+
+Module utilisé : `nn.MultiheadAttention`
+
+---
+
+### 🌀 5. MFU — Multimodal Fusion Unit  
+Le cœur de DEVANet.  
+Combine texte + audio + vision via :  
+- projections linéaires  
+- attention croisée  
+- **pondération apprenable** :  
+  - α = poids audio  
+  - β = poids vision  
+
+---
+
+### 🎯 6. Prédicteur final  
+Une MLP prédit un **score de sentiment continu** dans [-1, 1].  
+Le signe du score donne la classe.
+
+---
+
+## 📈 Entraînement & Évaluation
+
+### ⚙️ Setup
+- Optimiseur : **AdamW**  
+- Loss : **MSE**  
+- Nombre d’époques : 10  
+- Sauvegarde : `best_deva_meld.pt`  
+
+### 📏 Métriques utilisées
+- **Acc-2** (binaire positive / négative)  
+- **Acc-5**  
+- **Acc-7**  
+- **F1-score**  
+- **MAE**  
+- **Pearson corr**  
+
+---
+
+## 🧪 Résultats sur Test
+
+| Metric | Value |
+|--------|--------|
+| Test Loss | ⭐ 0.0054 |
+| **Acc-2** | **0.8733** |
+| Acc-5 | 0.2000 |
+| Acc-7 | 0.1467 |
+| **F1** | **0.8768** |
+| MAE | 0.0518 |
+| **Pearson** | **0.9975** |
+
+Les résultats montrent une excellente cohérence (corrélation ≈ 1) et une très bonne précision binaire.
+
+---
+
+## 🧩 MFU — Analyse des poids α & β
+
+### 🔢 Poids appris
+| Poids | Valeur |
+|--------|---------|
+| α (audio) | 0.9973 |
+| β (vision) | 1.0011 |
+
+### 🧮 Contribution normalisée
+| Modalité | Contribution |
+|-----------|--------------|
+| 🔊 Audio | 49.9% |
+| 👀 Vision | 50.1% |
+
+📌 **Le modèle privilégie très légèrement la vision (+0.2%).**
+
+---
 
 ## 🔍 Exemples de Prédictions
 
-Le notebook inclut :
+### ✔ Example 1
+- **Text** : "Why do all you're coffee mugs have numbers on the bottom?"  
+- **True** : positive  
+- **Pred** : positive (1.015)  
+- **Emotion** : surprise  
 
-- utterance d’origine
+### ✔ Example 2
+- **Text** : "Where’s number 27?!"  
+- **True** : negative  
+- **Pred** : negative (-0.842)  
+- **Emotion** : anger  
 
-- description audio générée
+### ✔ Example 3
+- **Text** : "Y'know what?"  
+- **True** : neutral  
+- **Pred** : neutral (-0.015)  
 
-- description visuelle générée
+### ✔ Examples 4 & 5  
+Plusieurs utterances neutres → toutes prédites correctement.
 
-- score prédit
+---
 
-- comparaison avec la vérité terrain
+## ▶️ Comment Exécuter le Projet
 
-## 👤 Auteurs
+### 📦 Prérequis
+- Python 3.x  
+- Données MELD prétraitées disponibles localement  
+- Librairies essentielles  
 
-Projet réalisé par Yohan MARCEL / Thomas MATHIOT / Nicolas PINIER / Anthony SABBAGH.
+### 🔧 Installation
