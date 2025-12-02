@@ -117,3 +117,7 @@ Le notebook inclut :
 - score prédit
 
 - comparaison avec la vérité terrain
+
+## 👤 Auteurs
+
+Projet réalisé par Yohan MARCEL / Thomas MATHIOT / Nicolas PINIER / Anthony SABBAGH.
