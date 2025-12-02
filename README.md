@@ -1,6 +1,8 @@
 # DEVA — Multimodal Sentiment Analysis on MELD
 
 > Transformer audio & vision into textual descriptions for unified multimodal sentiment prediction.
+> ### 🔧 Auteurs 
+- Yohan MARCEL / Thomas MATHIOT / Nicolas PINIER / Anthony SABBAGH
 
 ---
 
@@ -191,6 +193,3 @@ Plusieurs utterances neutres → toutes prédites correctement.
 - Python 3.x  
 - Données MELD prétraitées disponibles localement  
 - Librairies essentielles  
-
-### 🔧 Auteurs 
-- Yohan MARCEL / Thomas MATHIOT / Nicolas PINIER / Anthony SABBAGH
