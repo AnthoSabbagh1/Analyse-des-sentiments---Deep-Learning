@@ -4,6 +4,8 @@
 
 ---
 
+Lien du dataset : https://www.kaggle.com/datasets/argish/meld-preprocessed/data
+
 ## 📘 Introduction
 
 DEVA est un modèle d’analyse de sentiment multimodal appliqué au dataset **MELD**.  
