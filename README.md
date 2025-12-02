@@ -6,8 +6,8 @@
 
 ---
 
-Lien du dataset : https://www.kaggle.com/datasets/argish/meld-preprocessed/data
-
+- Lien du dataset : https://www.kaggle.com/datasets/argish/meld-preprocessed/data
+- Lien de l'article scientifique qui nous a permis d'en apprendre davantage : https://aclanthology.org/P19-1656.pdf
 
 > 🎭 **Texte + Audio + Vision** unifiés pour prédire le sentiment humain avec l’architecture DEVANet.
 
