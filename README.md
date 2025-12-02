@@ -193,7 +193,4 @@ Plusieurs utterances neutres → toutes prédites correctement.
 - Librairies essentielles  
 
 ### 🔧 Auteurs 
-- Yohan MARCEL
-- Thomas MATHIOT
-- Nicolas PINIER
-- Anthony SABBAGH
+- Yohan MARCEL / Thomas MATHIOT / Nicolas PINIER / Anthony SABBAGH
