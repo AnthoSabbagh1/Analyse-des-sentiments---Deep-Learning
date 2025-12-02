@@ -23,7 +23,7 @@ Les modalités non textuelles sont converties en **descriptions textuelles**, pu
 - 🧠 Encodage textuel : BERT + Transformer Encoder  
 - 🗣️ Génération de descriptions audio et visuelles  
 - 🧩 Minor Fusion Unit (MFU) avec poids apprenables (α / β)  
-- 📊 Évaluation complète : Acc-2, F1, MAE, Pearson  
+- 📊 Évaluation complète : Acc-2, Acc-5, Acc-7 F1, MAE, Pearson  
 - ⚖️ Sampling stratifié pour un dataset équilibré  
 
 ---
