@@ -51,7 +51,7 @@ Chaque entrée contient :
 
 ---
 
-### 📊 Données échantillonnées (stratified)
+### 📊 Données échantillonnées aléatoires (stratified)
 | Set | Total | 😀 Pos | 😡 Neg | 😐 Neu |
 |------|-------|--------|--------|--------|
 | Train | 300 | 100 | 100 | 100 |
