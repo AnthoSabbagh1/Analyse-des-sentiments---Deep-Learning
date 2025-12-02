@@ -77,3 +77,14 @@ Sampling stratifié sur train et validation.
 
 ### Prérequis
 
+Python 3.x
+torch
+transformers
+numpy
+pandas
+scikit-learn
+scipy
+tqdm
+matplotlib
+seaborn
+pathlib
